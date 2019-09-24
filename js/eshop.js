@@ -24015,10 +24015,11 @@ let crEl = function (elem) {
 	itemName = crEl('h3'),
 	itemPrice = crEl('h4'),
 	addToCart = crEl('div'),
+	rowBootstrap = crEl('div'),
 	addToCartBtn = crEl('button');
 
 let toRow = store.querySelector('.row');
-let itemMask = 'prct_'
+let itemMask = 'prct_';
 
 let fragment = document.createDocumentFragment();
 
@@ -24031,6 +24032,7 @@ itemName.classList.add('product-name');
 itemPrice.classList.add('product-price');
 addToCart.classList.add('add-to-cart');
 addToCartBtn.classList.add('add-to-cart-btn');
+rowBootstrap.classList.add('row', 'pseudoSection');
 
 addToCartBtn.innerHTML = '<i class="fa fa-shopping-cart"></i>Купить';
 
@@ -24044,12 +24046,15 @@ itemBody.appendChild(itemPrice);
 itemBody.appendChild(addToCart);
 addToCart.appendChild(addToCartBtn);
 
-console.log(itemBootstrap);
-
 let toShow = document.getElementById('toScreen'),
-	itemsToScreen = toShow[toShow.selectedIndex].value;
+		itemsToScreen = +toShow[toShow.selectedIndex].value;
 
-// let readyItem
+let qtyItemsOnScreen = itemsToScreen;
+
+console.log(itemsToScreen);
+
+document.querySelector('.store-show').textContent = qtyItemsOnScreen;
+document.querySelector('.total-items').textContent = itemList.length;
 
 function showItem() {
 
@@ -24066,13 +24071,28 @@ function showItem() {
 		itemClone.querySelector('img').setAttribute('src', itemList[i].image);
 		itemClone.querySelector('img').setAttribute('alt', itemList[i].title);
 
-		fragment.appendChild(itemClone);
+		rowBootstrap.appendChild(itemClone);
 	}
 
-	toRow.appendChild(fragment);
+	// rowBootstrap.appendChild(fragment);
+	document.querySelector('.store-filter').insertAdjacentElement('afterend', rowBootstrap);
 }
 
 showItem();
+
+function pagination() {
+
+	for (let i = itemsToScreen; i <= itemList.length; i += itemsToScreen) {
+		// showItem();
+		// qtyItemsOnScreen += qtyItemsOnScreen;
+		console.log(qtyItemsOnScreen);
+	}
+	console.log('====================================');
+	console.log(qtyItemsOnScreen);
+	console.log('====================================');
+}
+
+pagination();
 
 let completeItem = document.querySelectorAll('.product');
 
