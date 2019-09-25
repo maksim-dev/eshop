@@ -7,21 +7,22 @@ function crEl(elem) {
 }
 
 const store = document.querySelector('#store');
+const cart = document.querySelector('.cart-list');
+const cartItem = cart.querySelector('.product-widget');
+const cloneCartItem = cart.querySelector('.product-widget');
 const item = document.querySelector('.product').parentNode;
 const cloneItem = item.cloneNode(true);
 const toRow = store.querySelector('.pseudoSection');
 const itemMask = 'prct_';
 const perPage = 15;
 const pageBtns = document.querySelector('.store-pagination');
-let siteLocalStorage = {};
 let completeItem = document.querySelectorAll('.product');
+
+let getSiteData = [];
 
 let page = 1;
 
 let itemsToRender = data.slice((page - 1) * perPage, (page - 1) * perPage + perPage);
-
-console.log(itemsToRender);
-
 
 function showItem() {
 	while (toRow.firstChild) {
@@ -43,6 +44,8 @@ function showItem() {
 	}
 	completeItem = document.querySelectorAll('.product');
 
+	addToCart();
+
 	// document.querySelector('.product').parentNode.remove();
 }
 
@@ -63,6 +66,33 @@ function pagination() {
 
 pagination();
 
+function addToCart() {
+	while (cart.firstChild) {
+		cart.removeChild(cart.firstChild);
+	}
+	
+	if (getSiteData.length > 0) {
+		localStorage.setItem('siteData', JSON.stringify(getSiteData));
+	}
+	
+
+	let itemToCart = JSON.parse(localStorage.getItem('siteData'));
+
+	console.log(cloneCartItem);
+	console.log('++++');
+	
+	for (let i = 0; i < itemToCart.length; i++) {
+		let currentCloneCartItem = cloneCartItem.cloneNode(true);
+		
+		currentCloneCartItem.querySelector('.product-img').querySelector('img').setAttribute('src', itemToCart[i].image);
+		currentCloneCartItem.querySelector('.product-name').textContent = itemToCart[i].title;
+		currentCloneCartItem.querySelector('.product-total-price').textContent = itemToCart[i].price;
+		currentCloneCartItem.querySelector('.product-name').textContent = itemToCart[i].title;
+
+		cart.appendChild(currentCloneCartItem);
+	}
+}
+
 const paginationButtons = document.querySelector('.store-pagination').querySelectorAll('li');
 
 paginationButtons.forEach(function (i) {
@@ -82,9 +112,8 @@ completeItem.forEach(function (i) {
 
 	let toCart = i.querySelector('.add-to-cart-btn');
 	toCart.addEventListener('click', function () {
-		console.log(JSON.stringify(data[this.getAttribute('data-item-id')]));
-		
-		siteLocalStorage += JSON.stringify(data[this.getAttribute('data-item-id')]);
-		localStorage.setItem('siteData', JSON.stringify(siteLocalStorage));
+		// let siteLocalStorage = JSON.stringify(data[this.getAttribute('data-item-id')-1]);
+		getSiteData.push(data[this.getAttribute('data-item-id')-1]);
+		addToCart();
 	});
 });

@@ -541,6 +541,10 @@ textarea.input {
   display: none;
 }
 
+.header-ctn .dropdown {
+	cursor: pointer;
+}
+
 .cart-dropdown {
   position: absolute;
   width: 300px;
@@ -551,7 +555,7 @@ textarea.input {
   z-index: 99;
   right: 0;
   opacity: 0;
-  visibility: hidden;
+	visibility: hidden;
 }
 
 .dropdown.open>.cart-dropdown {
@@ -1357,7 +1361,8 @@ textarea.input {
   background-color: #FFF;
   border: 1px solid #E4E7ED;
   -webkit-transition: 0.2s all;
-  transition: 0.2s all;
+	transition: 0.2s all;
+	cursor: pointer;
 }
 
 .store-pagination li+li {
