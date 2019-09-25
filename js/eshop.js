@@ -24,6 +24,10 @@ let page = 1;
 
 let itemsToRender = data.slice((page - 1) * perPage, (page - 1) * perPage + perPage);
 
+while (cart.firstChild) {
+	cart.removeChild(cart.firstChild);
+}
+
 function showItem() {
 	while (toRow.firstChild) {
 		toRow.removeChild(toRow.firstChild);
@@ -67,23 +71,15 @@ function pagination() {
 pagination();
 
 function addToCart() {
-	while (cart.firstChild) {
-		cart.removeChild(cart.firstChild);
-	}
-	
-	if (getSiteData.length > 0) {
-		localStorage.setItem('siteData', JSON.stringify(getSiteData));
-	}
-	
 
-	let itemToCart = JSON.parse(localStorage.getItem('siteData'));
+	let itemToCart = JSON.parse(localStorage.getItem('products'));
 
-	console.log(cloneCartItem);
-	console.log('++++');
+	let cartItemMask = itemMask + 'wid_';
 	
 	for (let i = 0; i < itemToCart.length; i++) {
 		let currentCloneCartItem = cloneCartItem.cloneNode(true);
 		
+		currentCloneCartItem.setAttribute('id', cartItemMask + itemToCart[i].id);
 		currentCloneCartItem.querySelector('.product-img').querySelector('img').setAttribute('src', itemToCart[i].image);
 		currentCloneCartItem.querySelector('.product-name').textContent = itemToCart[i].title;
 		currentCloneCartItem.querySelector('.product-total-price').textContent = itemToCart[i].price;
@@ -113,7 +109,15 @@ completeItem.forEach(function (i) {
 	let toCart = i.querySelector('.add-to-cart-btn');
 	toCart.addEventListener('click', function () {
 		// let siteLocalStorage = JSON.stringify(data[this.getAttribute('data-item-id')-1]);
-		getSiteData.push(data[this.getAttribute('data-item-id')-1]);
+		// getSiteData.push(data[this.getAttribute('data-item-id')-1]);
+		
+	
+		let products = [];
+		if(localStorage.getItem('products')){
+				products = JSON.parse(localStorage.getItem('products'));
+		}
+		products.push(data[this.getAttribute('data-item-id')-1]);
+		localStorage.setItem('products', JSON.stringify(products));
 		addToCart();
 	});
 });
