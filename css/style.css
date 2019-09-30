@@ -1349,14 +1349,14 @@ textarea.input {
 /*-- Store Pagination --*/
 
 .store-pagination {
-  float: right;
+	float: right;
+	width: 100%;
+	margin-top: 15px;
 }
 
 .store-pagination li {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+	display: inline-block;
+	padding: 8px 12px;
   text-align: center;
   background-color: #FFF;
   border: 1px solid #E4E7ED;
@@ -1366,7 +1366,8 @@ textarea.input {
 }
 
 .store-pagination li+li {
-  margin-left: 5px;
+	margin-left: 5px;
+	margin-bottom: 5px;
 }
 
 .store-pagination li:hover {
@@ -1384,6 +1385,15 @@ textarea.input {
 
 .store-pagination li a {
   display: block;
+}
+
+.store-pagination span {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.store-pagination span:hover {
+	text-decoration-color: #d10024;
 }
 
 .store-qty {
