@@ -16,11 +16,14 @@ const toRow = store.querySelector('.pseudoSection');
 const itemMask = 'prct_';
 const perPage = 15;
 const pageBtns = document.querySelector('.store-pagination');
+const sortButton = document.querySelector('.sort-var').querySelectorAll('span');
+
+let filteredData = data;
 let completeItems = document.querySelectorAll('.product');
 
 let products = [];
 
-let pageQty = Math.ceil(data.length / perPage);
+let pageQty = Math.ceil(filteredData.length / perPage);
 
 if (products.length > 0) {
 	localStorage.setItem('products', JSON.stringify(products));
@@ -32,7 +35,7 @@ if (products.length === 0 && localStorage.length === 0) {
 
 let page = 0;
 
-let itemsToRender = data.slice(page * perPage, page * perPage + perPage);
+let itemsToRender = filteredData.slice(page * perPage, page * perPage + perPage);
 
 while (cart.firstChild) {
 	cart.removeChild(cart.firstChild);
@@ -43,7 +46,7 @@ function showItem() {
 		toRow.removeChild(toRow.firstChild);
 	}
 
-	let itemsToRender = data.slice(page * perPage, page * perPage + perPage);
+	let itemsToRender = filteredData.slice(page * perPage, page * perPage + perPage);
 
 	for (let i = 0; i < perPage; i++) {
 
@@ -64,13 +67,13 @@ function showItem() {
 	completeItems.forEach(function (item) {
 
 		let toCart = item.querySelector('.add-to-cart-btn');
-		
+
 		toCart.addEventListener('click', function () {
 
 			if (localStorage.getItem('products')) {
 				products = JSON.parse(localStorage.getItem('products'));
 			}
-			products.push(data[this.getAttribute('data-item-id') - 1]);
+			products.push(filteredData[this.getAttribute('data-item-id') - 1]);
 			localStorage.setItem('products', JSON.stringify(products));
 			addToCart();
 		});
@@ -158,7 +161,7 @@ function addToCart() {
 
 	let totalPrice = 0;
 
-	itemToCart.forEach(function(e) {
+	itemToCart.forEach(function (e) {
 		totalPrice += +e.price;
 	});
 
@@ -169,7 +172,7 @@ function addToCart() {
 const paginationButtons = document.querySelector('.store-pagination').querySelectorAll('li');
 
 paginationButtons.forEach(function (i, n) {
-	
+
 	i.addEventListener('click', function () {
 		let currentActivePage = this.parentNode.querySelector('.active');
 
@@ -177,7 +180,7 @@ paginationButtons.forEach(function (i, n) {
 		this.classList.add('active');
 
 		page = +this.textContent - 1;
-		itemsToRender = data.slice(page * perPage, page * perPage + perPage);
+		itemsToRender = filteredData.slice(page * perPage, page * perPage + perPage);
 
 		store.scrollIntoView({
 			block: 'start',
@@ -189,3 +192,41 @@ paginationButtons.forEach(function (i, n) {
 });
 
 addToCart();
+
+function compareNumbers(a, b) {
+	return +a.price - +b.price;
+}
+
+sortButton.forEach(function (i) {
+	i.addEventListener('click', function(e) {
+		this.classList.toggle('active');
+		
+		if (this.getAttribute('data-sort') == 'toHigh') {
+			this.previousElementSibling.classList.remove('active');
+			filteredData = data.sort(function(a, b) {
+				return +a.price - +b.price;
+			});
+			showItem();
+		}
+
+		if (this.getAttribute('data-sort') == 'toLow') {
+			this.nextElementSibling.classList.remove('active');
+			filteredData = data.sort(function(a, b) {
+				return +b.price - +a.price;
+			});
+			showItem();
+		}
+
+		if (this.getAttribute('data-sort') == 'available') {
+			let filteredDataAvailable = [];
+			filteredData.forEach(function (item) {
+				if (item.available) {
+					filteredDataAvailable.push(item);
+				}
+			});
+			filteredData = filteredDataAvailable;
+			showItem();
+			console.log(filteredData);
+		}
+	});
+});

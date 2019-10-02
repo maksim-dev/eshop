@@ -1297,6 +1297,23 @@ textarea.input {
 
 /*-- Store Sort --*/
 
+.sort-var {
+	margin-bottom: 10px;
+}
+
+.sort-var span {
+	background-color: rgba(0,0,0,.05);
+	display: inline-block;
+	margin-right: 5px;
+	padding: 4px 8px;
+	cursor: pointer;
+}
+
+.sort-var span.active {
+	background-color: #d10024;
+	color: #fff;
+}
+
 .store-sort {
   display: inline-block;
 }
