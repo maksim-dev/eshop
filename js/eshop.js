@@ -198,12 +198,12 @@ function compareNumbers(a, b) {
 }
 
 sortButton.forEach(function (i) {
-	i.addEventListener('click', function(e) {
+	i.addEventListener('click', function (e) {
 		this.classList.toggle('active');
-		
+
 		if (this.getAttribute('data-sort') == 'toHigh') {
 			this.previousElementSibling.classList.remove('active');
-			filteredData = data.sort(function(a, b) {
+			filteredData = data.sort(function (a, b) {
 				return +a.price - +b.price;
 			});
 			showItem();
@@ -211,22 +211,30 @@ sortButton.forEach(function (i) {
 
 		if (this.getAttribute('data-sort') == 'toLow') {
 			this.nextElementSibling.classList.remove('active');
-			filteredData = data.sort(function(a, b) {
+			filteredData = data.sort(function (a, b) {
 				return +b.price - +a.price;
 			});
 			showItem();
 		}
 
 		if (this.getAttribute('data-sort') == 'available') {
-			let filteredDataAvailable = [];
-			filteredData.forEach(function (item) {
-				if (item.available) {
-					filteredDataAvailable.push(item);
-				}
-			});
-			filteredData = filteredDataAvailable;
-			showItem();
-			console.log(filteredData);
+			if (!this.classList.contains('active')) {
+				filteredData = data;
+				showItem();
+				// sortButton.forEach(function(i) {
+				// 	i.classList.remove('active');
+				// });
+			} else {
+				let filteredDataAvailable = [];
+				filteredData.forEach(function (item) {
+					if (item.available) {
+						filteredDataAvailable.push(item);
+					}
+				});
+				filteredData = filteredDataAvailable;
+				showItem();
+				console.log(filteredData);
+			}
 		}
 	});
 });
