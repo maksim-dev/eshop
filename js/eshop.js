@@ -75,6 +75,7 @@ function showItem() {
 			}
 			products.push(filteredData[this.getAttribute('data-item-id') - 1]);
 			localStorage.setItem('products', JSON.stringify(products));
+
 			addToCart();
 		});
 	});
@@ -92,7 +93,6 @@ function pagination() {
 		document.querySelector('#last-page').textContent = pageQty;
 	}
 
-	// if ()
 }
 
 pagination();
@@ -146,6 +146,7 @@ function addToCart() {
 	let cartItemMask = itemMask + 'wid_';
 
 	for (let i = 0; i < itemToCart.length; i++) {
+
 		let currentCloneCartItem = cartItem.cloneNode(true);
 
 		currentCloneCartItem.setAttribute('id', cartItemMask + itemToCart[i].id);
@@ -154,19 +155,50 @@ function addToCart() {
 		currentCloneCartItem.querySelector('.product-total-price').textContent = itemToCart[i].price;
 		currentCloneCartItem.querySelector('.product-name').textContent = itemToCart[i].title;
 
+		removeFromCart(i, currentCloneCartItem, itemToCart);
+
 		cart.appendChild(currentCloneCartItem);
 	}
 
-	cartItemQty.textContent = itemToCart.length;
+	itemToCart.sort(function (a, b) {
+		return a === b;
+	});
+
+	countCartQty(itemToCart);
+	countCartTotal(itemToCart);
+}
+
+function countCartQty(arr) {
+
+	cartItemQty.textContent = arr.length;
+
+	document.querySelector('.cart-summary').querySelector('small').textContent = arr.length + ' Item(s) selected';
+}
+
+function countCartTotal(arr) {
 
 	let totalPrice = 0;
 
-	itemToCart.forEach(function (e) {
-		totalPrice += +e.price;
+	arr.forEach(function (i) {
+		totalPrice += +i.price;
 	});
 
-	document.querySelector('.cart-summary').querySelector('small').textContent = itemToCart.length + ' Item(s) selected';
 	document.querySelector('.cart-summary').querySelector('h5').textContent = 'Subtotal: ' + totalPrice + '\u20BD';
+}
+
+function removeFromCart(i, elem, storage) {
+	elem.querySelector('.delete').addEventListener('click', function (e) {
+
+		elem.remove();
+
+		storage.splice(i, 1);
+		products = storage;
+
+		countCartQty(storage);
+		countCartTotal(storage);
+		// console.log(`HI = ${JSON.stringify(products)}`);
+		localStorage.setItem('products', JSON.stringify(products));
+	});
 }
 
 const paginationButtons = document.querySelector('.store-pagination').querySelectorAll('li');
@@ -221,19 +253,17 @@ sortButton.forEach(function (i) {
 			if (!this.classList.contains('active')) {
 				filteredData = data;
 				showItem();
-				// sortButton.forEach(function(i) {
-				// 	i.classList.remove('active');
-				// });
 			} else {
 				let filteredDataAvailable = [];
+
 				filteredData.forEach(function (item) {
 					if (item.available) {
 						filteredDataAvailable.push(item);
 					}
 				});
+
 				filteredData = filteredDataAvailable;
 				showItem();
-				console.log(filteredData);
 			}
 		}
 	});
