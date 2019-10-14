@@ -20,6 +20,11 @@ const sortButton = document.querySelector('.sort-var').querySelectorAll('span');
 
 let filteredData = data;
 let completeItems = document.querySelectorAll('.product');
+const nextButton = document.querySelector('#next');
+const previousButton = document.querySelector('#previous');
+const firstButton = document.querySelector('#first');
+const lastButton = document.querySelector('#last');
+const pageQty = Math.ceil(data.length / perPage);
 
 let products = [];
 
@@ -83,17 +88,52 @@ function showItem() {
 
 showItem();
 
+lastButton.textContent = pageQty;
+
 function pagination() {
 
 	for (let i = 1; i < 10; i++) {
 		let paginationButton = crEl('li');
 
 		paginationButton.textContent = i + 1;
+<<<<<<< Updated upstream
 		document.querySelector('#last-page').insertAdjacentElement('beforebegin', paginationButton);
 		document.querySelector('#last-page').textContent = pageQty;
+=======
+		lastButton.insertAdjacentElement('beforebegin', paginationButton);
+	}
+}
+
+function nextPage() {
+	if (page !== pageQty) {
+		page += 1;
+	}
+}
+
+function previousPage() {
+	if (page !== 1) {
+		page -= 1;
+>>>>>>> Stashed changes
 	}
 
 }
+
+function firstPage() {
+	if (page !== 1) {
+		page = 1;
+	}
+}
+
+function lastPage() {
+	if (page !== pageQty) {
+		page = pageQty;
+	}
+}
+
+nextButton.addEventListener('click', nextPage);
+previousButton.addEventListener('click', previousPage);
+firstButton.addEventListener('click', firstPage);
+lastButton.addEventListener('click', lastPage);
 
 pagination();
 
@@ -179,8 +219,13 @@ function countCartTotal(arr) {
 
 	let totalPrice = 0;
 
+<<<<<<< Updated upstream
 	arr.forEach(function (i) {
 		totalPrice += +i.price;
+=======
+	itemToCart.forEach(function(e) {
+		totalPrice += e.price;
+>>>>>>> Stashed changes
 	});
 
 	document.querySelector('.cart-summary').querySelector('h5').textContent = 'Subtotal: ' + totalPrice + '\u20BD';

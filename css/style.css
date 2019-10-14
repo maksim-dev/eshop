@@ -1372,14 +1372,20 @@ textarea.input {
 }
 
 .store-pagination li {
+<<<<<<< Updated upstream
 	display: inline-block;
 	padding: 8px 12px;
+=======
+  display: inline-block;
+  min-width: 40px;
+>>>>>>> Stashed changes
   text-align: center;
   background-color: #FFF;
   border: 1px solid #E4E7ED;
   -webkit-transition: 0.2s all;
 	transition: 0.2s all;
 	cursor: pointer;
+	padding: 4px 12px;
 }
 
 .store-pagination li+li {
