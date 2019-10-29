@@ -1366,9 +1366,8 @@ textarea.input {
 /*-- Store Pagination --*/
 
 .store-pagination {
-	float: right;
-	width: 100%;
-	margin-top: 15px;
+	display: inline-flex;
+	margin: 15px 15px 0;
 }
 
 .store-pagination li {
@@ -1415,7 +1414,9 @@ textarea.input {
 }
 
 .store-qty {
-  margin-right: 30px;
+	margin-right: 30px;
+	width: 100%;
+	display: block;
   font-weight: 500;
   text-transform: uppercase;
   font-size: 12px;
