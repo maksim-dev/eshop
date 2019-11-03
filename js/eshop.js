@@ -120,28 +120,24 @@ function showItem() {
 
 showItem();
 
-// lastButton.textContent = pageQty;
-
-const pagination = (page, lastPage = pageQty) => {
-	const startBtns = [page, page + 1, page + 2];
-	const gapBtns = [page - 2, page - 1, page];
+const pagination = (pageNum, lastPage = pageQty) => {
+	const startBtns = [pageNum, pageNum + 1, pageNum + 2];
+	const gapBtns = [pageNum - 2, pageNum - 1, pageNum];
 	const middleBtn = ["..."];
+	const prelastBtns = [lastPage - 7, lastPage - 6, lastPage - 5];
 	const lastBtns = [lastPage - 3, lastPage - 2, lastPage - 1];
 
 	let btnsArr = [];
 
-	if (page < lastPage - 6) {
+	if (pageNum < lastPage - 6) {
 		btnsArr = [...startBtns, ...middleBtn, ...lastBtns];
-	} else if (page < lastPage - 4) {
+	} else if (pageNum < lastPage - 4) {
 		btnsArr = [...gapBtns, ...middleBtn, ...lastBtns];
-	} else if (page < lastPage - 3) {
+	} else if (pageNum < lastPage - 3) {
 		btnsArr = [...gapBtns, ...lastBtns]; // last 6 pages
 	} else {
-		btnsArr = [...middleBtn, ...lastBtns]; // last 3 pages
+		btnsArr = [...prelastBtns, ...middleBtn, ...lastBtns]; // last 3 pages
 	}
-
-	console.log(btnsArr);
-
 	
 	while (pageBtns.firstChild) {
 		pageBtns.removeChild(pageBtns.firstChild);
@@ -153,21 +149,14 @@ const pagination = (page, lastPage = pageQty) => {
 		if (index == 0) paginationButton.classList.add("active");
 
 		paginationButton.textContent = num !== "..." ? num + 1 : num;
-		pageBtns.appendChild(paginationButton);
-	});
 
-	const paginationButtons = pageBtns.querySelectorAll("li");
-	
-	paginationButtons.forEach(function(i, n) {
-		i.addEventListener("click", function() {
-			paginationButtons.forEach(function(el) {
-				el.classList.remove("active");
-			});
+		paginationButton.addEventListener("click", function() {
 	
 			this.classList.remove("active");
 			this.classList.add("active");
 	
 			page = +this.textContent - 1;
+			console.log(page);
 			itemsToRender = filteredData.slice(
 				page * perPage,
 				page * perPage + perPage
@@ -182,7 +171,11 @@ const pagination = (page, lastPage = pageQty) => {
 	
 			showItem();
 		});
+
+		pageBtns.appendChild(paginationButton);
 	});
+
+	const paginationButtons = pageBtns.querySelectorAll("li");
 
 };
 
@@ -349,6 +342,9 @@ sortButton.forEach(function(i) {
 				if (!this.classList.contains("active")) {
 					filteredData = data.concat();
 					console.log(`Default available: ${filteredData.length}`);
+
+					pageQty = Math.ceil(filteredData.length / perPage);
+					pagination(page, pageQty);
 					showItem();
 				} else {
 					let filteredDataAvailable = [];
@@ -360,6 +356,9 @@ sortButton.forEach(function(i) {
 					});
 
 					filteredData = filteredDataAvailable;
+
+					pageQty = Math.ceil(filteredData.length / perPage);
+					pagination(page, pageQty);
 					showItem();
 				}
 
